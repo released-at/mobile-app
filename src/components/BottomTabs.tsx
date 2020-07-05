@@ -20,12 +20,24 @@ export const BottomTabs: React.FC<{}> = () => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: 'tomato',
+        activeTintColor: '#4287f5',
         inactiveTintColor: 'gray',
       }}
     >
-      <Tabs.Screen name="Calendar" component={CalendarStack} />
-      <Tabs.Screen name="Archive" component={ArchiveStack} />
+      <Tabs.Screen
+        options={{
+          title: 'Календарь',
+        }}
+        name="Calendar"
+        component={CalendarStack}
+      />
+      <Tabs.Screen
+        options={{
+          title: 'Архив',
+        }}
+        name="Archive"
+        component={ArchiveStack}
+      />
     </Tabs.Navigator>
   )
 }

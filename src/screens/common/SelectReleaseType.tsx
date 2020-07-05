@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableOpacity, Text } from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { format } from 'date-fns'
 import { CalendarStackNavProps } from '../../types/CalendarParamList'
 
@@ -9,8 +9,9 @@ export const SelectReleaseType: React.FC<CalendarStackNavProps<
   const date = route.params?.date || format(new Date(), 'M-yyyy')
 
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableOpacity
+        style={styles.button}
         onPress={() => {
           navigation.navigate('Releases', {
             type: 'movies',
@@ -18,9 +19,10 @@ export const SelectReleaseType: React.FC<CalendarStackNavProps<
           })
         }}
       >
-        <Text>Movies</Text>
+        <Text style={styles.text}>Кино</Text>
       </TouchableOpacity>
       <TouchableOpacity
+        style={styles.button}
         onPress={() => {
           navigation.navigate('Releases', {
             type: 'games',
@@ -28,9 +30,10 @@ export const SelectReleaseType: React.FC<CalendarStackNavProps<
           })
         }}
       >
-        <Text>Games</Text>
+        <Text style={styles.text}>Игры</Text>
       </TouchableOpacity>
       <TouchableOpacity
+        style={styles.button}
         onPress={() => {
           navigation.navigate('Releases', {
             type: 'serials',
@@ -38,8 +41,22 @@ export const SelectReleaseType: React.FC<CalendarStackNavProps<
           })
         }}
       >
-        <Text>Serials</Text>
+        <Text style={styles.text}>Сериалы</Text>
       </TouchableOpacity>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  button: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 28,
+  },
+})
