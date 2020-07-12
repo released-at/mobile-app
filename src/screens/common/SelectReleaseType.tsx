@@ -25,23 +25,23 @@ export const SelectReleaseType: React.FC<CalendarStackNavProps<
         style={styles.button}
         onPress={() => {
           navigation.navigate('Releases', {
-            type: 'games',
-            date,
-          })
-        }}
-      >
-        <Text style={styles.text}>Игры</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate('Releases', {
             type: 'serials',
             date,
           })
         }}
       >
         <Text style={styles.text}>Сериалы</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate('Releases', {
+            type: 'games',
+            date,
+          })
+        }}
+      >
+        <Text style={styles.text}>Игры</Text>
       </TouchableOpacity>
     </View>
   )
@@ -58,5 +58,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 28,
+    color: '#f9f9f9',
+    fontFamily: 'Rubik_700Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
   },
 })

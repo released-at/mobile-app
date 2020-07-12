@@ -17,26 +17,47 @@ export const CalendarStack: React.FC<{}> = () => {
         name="SelectReleaseType"
         component={SelectReleaseType}
         options={{
-          header: () => null,
+          headerShown: false,
+          cardStyle: {
+            backgroundColor: 'rgb(11, 11, 11)',
+          },
         }}
       />
       <Stack.Screen
         name="Releases"
         options={({ route }) => {
-          const { type, date } = route.params
-          const [month, year] = date.split('-')
+          const { type } = route.params
 
           return {
-            title: `${mapTypesToRu(type)} | ${format(
-              new Date(+year, +month - 1, 1),
-              'LLLL yyyy',
-              { locale: ru },
-            )}`,
+            title: mapTypesToRu(type),
+            cardStyle: {
+              backgroundColor: 'rgb(11, 11, 11)',
+            },
+            headerBackTitle: 'Назад',
+            headerStyle: {
+              backgroundColor: 'rgb(11, 11, 11)',
+              shadowColor: 'rgb(77, 77, 77)',
+            },
+            headerTitleStyle: {
+              color: '#f9f9f9',
+            },
+            headerTintColor: '#f9f9f9',
           }
         }}
         component={Releases}
       />
-      <Stack.Screen name="Release" component={Release} />
+      <Stack.Screen
+        options={({ route }) => ({
+          title: '',
+          cardStyle: {
+            backgroundColor: 'rgb(11, 11, 11)',
+          },
+          headerTransparent: true,
+          headerTintColor: '#f9f9f9',
+        })}
+        name="Release"
+        component={Release}
+      />
     </Stack.Navigator>
   )
 }

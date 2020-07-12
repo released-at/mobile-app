@@ -6,12 +6,15 @@ export type ArchiveParamList = {
   SelectDate: undefined
   SelectReleaseType: {
     date: string
+    formattedDate: string
   }
   Releases: {
     type: keyof typeof ReleaseTypes
+    date: string
   }
   Release: {
     id: string
+    title: string
   }
 }
 

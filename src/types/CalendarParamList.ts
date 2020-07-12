@@ -5,6 +5,7 @@ import { ReleaseTypes } from './ReleaseTypes'
 export type CalendarParamList = {
   SelectReleaseType: {
     date?: string
+    formattedDate?: string
   }
   Releases: {
     type: keyof typeof ReleaseTypes
@@ -12,6 +13,7 @@ export type CalendarParamList = {
   }
   Release: {
     id: string
+    title: string
   }
 }
 
