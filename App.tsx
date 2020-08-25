@@ -9,9 +9,9 @@ import {
   useFonts,
 } from '@expo-google-fonts/rubik'
 import { Montserrat_200ExtraLight } from '@expo-google-fonts/montserrat'
-import { Main } from './src/Main'
+import Root from 'screens'
 
-export default function App() {
+function App() {
   const [fontsLoaded] = useFonts({
     Rubik_400Regular_Italic,
     Rubik_300Light,
@@ -23,5 +23,7 @@ export default function App() {
 
   if (!fontsLoaded) return <AppLoading />
 
-  return <Main />
+  return <Root />
 }
+
+export default App

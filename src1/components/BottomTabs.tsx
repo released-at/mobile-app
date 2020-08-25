@@ -5,12 +5,13 @@ import {
 } from '@react-navigation/bottom-tabs'
 import { Feather } from '@expo/vector-icons'
 import { BlurView } from 'expo-blur'
-import { Calendar, Archive, Me } from 'stacks'
-import { TabScreens } from 'types/screens'
+import { CalendarStack } from '../screens/calendar/Stack'
+import { ArchiveStack } from '../screens/archive/Stack'
+import { TabsParamList } from '../types/TabsParamList'
 
-const Tabs = createBottomTabNavigator<TabScreens>()
+const Tabs = createBottomTabNavigator<TabsParamList>()
 
-const BottomTabs: React.FC<{}> = () => {
+export const BottomTabs: React.FC<{}> = () => {
   return (
     <Tabs.Navigator
       tabBar={props => (
@@ -49,11 +50,9 @@ const BottomTabs: React.FC<{}> = () => {
         activeTintColor: '#4287f5',
       }}
     >
-      <Tabs.Screen name="Calendar" component={Calendar} />
-      <Tabs.Screen name="Archive" component={Archive} />
-      <Tabs.Screen name="Profile" component={Me} />
+      <Tabs.Screen name="Calendar" component={CalendarStack} />
+      <Tabs.Screen name="Archive" component={ArchiveStack} />
+      <Tabs.Screen name="Profile" component={ArchiveStack} />
     </Tabs.Navigator>
   )
 }
-
-export default BottomTabs

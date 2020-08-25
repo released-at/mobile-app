@@ -10,7 +10,7 @@ interface RequestReleaseParams {
 }
 
 class Api {
-  static base = 'https://api.calendaur.com/api'
+  static base = 'https://api.released.at/api'
 
   async releases({ type, date }: RequestReleasesParams) {
     try {
