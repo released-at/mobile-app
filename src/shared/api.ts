@@ -1,5 +1,5 @@
-import { ReleaseType } from 'types/releases'
-import { Id, DateParams } from 'types/common'
+import { ReleaseType } from '../types/releases'
+import { Id, DateParams } from '../types/common'
 import { fetchJSON, fetchWithToken } from './utils'
 import { endpoints } from './constants'
 
@@ -7,7 +7,7 @@ import { endpoints } from './constants'
 // Possibly type: movies, games, serials
 // Date format example: 01-2020
 export const releases = (type: ReleaseType, date: DateParams) =>
-  fetchJSON(endpoints.RELEASES(type, date))
+  fetch(endpoints.RELEASES(type, date)).then(res => res.json())
 export const release = (id: Id) => fetchJSON(endpoints.RELEASE(id))
 export const expect = (id: Id) =>
   fetchWithToken(endpoints.EXPECT(id), {

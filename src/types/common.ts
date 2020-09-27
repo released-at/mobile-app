@@ -12,9 +12,9 @@ export type MonthCalendarNumber =
   | 11
   | 12
 
-export type Id = number | string
+export type Id = number
 
 export type DateParams = {
   month: MonthCalendarNumber
-  year: number | string
+  year: number
 }

@@ -1,7 +1,7 @@
 export enum ReleaseTypes {
-  Films = 'movies',
+  Films = 'films',
   Games = 'games',
-  Series = 'serials',
+  Series = 'series',
 }
 
 export type ReleaseType =
@@ -14,3 +14,22 @@ export type ReleaseTypesTuple = [
   ReleaseTypes.Games,
   ReleaseTypes.Series,
 ]
+
+export enum Platforms {
+  PS4 = 'ps_4',
+  NintendoSwitch = 'nintendo_switch',
+  XboxOne = 'xbox_one',
+  PC = 'pc',
+}
+
+export type ReleaseInList = {
+  title: string
+  released: string
+  release_id: number
+  cover: string
+  director?: string
+  platforms?: Platforms[]
+  season?: number
+}
+
+export type Releases = ReleaseInList[]

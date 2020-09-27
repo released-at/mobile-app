@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 
-const Release: React.FC = () => {
+const SelectMonth: React.FC = () => {
   return (
     <View>
-      <Text>Release</Text>
+      <Text>SelectMonth</Text>
     </View>
   )
 }
 
-export default Release
+export default SelectMonth

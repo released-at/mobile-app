@@ -72,3 +72,7 @@ export async function fetchWithToken<R>(
 
   return parse<R>(response)
 }
+
+export function ifElse(cond: boolean, ifComp: any, elseComp: any = null) {
+  return cond ? ifComp : elseComp
+}

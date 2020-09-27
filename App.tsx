@@ -9,7 +9,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/rubik'
 import { Montserrat_200ExtraLight } from '@expo-google-fonts/montserrat'
-import Root from 'screens'
+import Root from './src/screens'
 
 function App() {
   const [fontsLoaded] = useFonts({

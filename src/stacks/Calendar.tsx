@@ -1,8 +1,8 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import Releases from 'screens/Releases'
-import Release from 'screens/Release'
-import { CalendarScreens } from 'types/screens'
+import Releases from '../screens/Releases'
+import Release from '../screens/Release'
+import { CalendarScreens } from '../types/screens'
 
 const Stack = createStackNavigator<CalendarScreens>()
 

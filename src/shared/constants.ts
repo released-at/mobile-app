@@ -1,5 +1,5 @@
-import { ReleaseType } from 'types/releases'
-import { Id, DateParams } from 'types/common'
+import { ReleaseType } from '../types/releases'
+import { Id, DateParams } from '../types/common'
 
 export const months = [
   { eng: 'january', rus: 'январь', jsNumber: 0, calendarNumber: 1 },

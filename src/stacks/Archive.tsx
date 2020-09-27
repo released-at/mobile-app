@@ -1,9 +1,9 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import SelectMonth from 'screens/SelectMonth'
-import Releases from 'screens/Releases'
-import Release from 'screens/Release'
-import { ArchiveScreens } from 'types/screens'
+import SelectMonth from '../screens/SelectMonth'
+import Releases from '../screens/Releases'
+import Release from '../screens/Release'
+import { ArchiveScreens } from '../types/screens'
 
 const Stack = createStackNavigator<ArchiveScreens>()
 

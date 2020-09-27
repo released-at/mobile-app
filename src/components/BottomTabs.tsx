@@ -5,8 +5,8 @@ import {
 } from '@react-navigation/bottom-tabs'
 import { Feather } from '@expo/vector-icons'
 import { BlurView } from 'expo-blur'
-import { Calendar, Archive, Me } from 'stacks'
-import { TabScreens } from 'types/screens'
+import { Calendar, Archive, Me } from '../stacks'
+import { TabScreens } from '../types/screens'
 
 const Tabs = createBottomTabNavigator<TabScreens>()
 
