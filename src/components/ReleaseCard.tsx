@@ -8,10 +8,12 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { format } from 'date-fns/esm'
 import { ru } from 'date-fns/esm/locale'
 import GamePlatformList from './GamePlatformList'
+import ExpectButton from './ExpectButton'
 import { ifElse } from '../shared/utils'
 
 interface Props {
@@ -25,8 +27,17 @@ const ReleaseCard: React.FC<Props> = ({
   type,
   release,
 }) => {
+  const { navigate } = useNavigation()
+
   return (
-    <TouchableHighlight style={[styles.container, style]}>
+    <TouchableHighlight
+      style={[styles.container, style]}
+      onPress={() =>
+        navigate('Release', {
+          id: release.release_id,
+        })
+      }
+    >
       <View style={styles.cardContent}>
         <LinearGradient
           colors={['transparent', 'rgba(0,0,0,0.75)']}
@@ -40,8 +51,12 @@ const ReleaseCard: React.FC<Props> = ({
               })}
             </Text>
           </View>
+          <ExpectButton style={styles.expect} type={type} release={release} />
         </View>
-        <Image style={styles.cover} source={{ uri: release.cover }} />
+        <Image
+          style={styles.cover}
+          source={{ uri: release.cover, cache: 'default' }}
+        />
         <View style={styles.footer}>
           <Text style={styles.title}>{release.title}</Text>
           {ifElse(
@@ -88,10 +103,16 @@ const styles = StyleSheet.create({
   },
   header: {
     position: 'absolute',
-    left: 16,
+    width: '100%',
+    paddingHorizontal: 16,
     top: 16,
     zIndex: 2,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
+  expect: {},
   releaseDate: {
     backgroundColor: '#fff',
     borderRadius: 12,

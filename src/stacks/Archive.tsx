@@ -1,20 +1,20 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import SelectMonth from '../screens/SelectMonth'
+import SelectMonthInArchive from '../screens/SelectMonthInArchive'
 import Releases from '../screens/Releases'
 import Release from '../screens/Release'
 import { ArchiveScreens } from '../types/screens'
 
 const Stack = createStackNavigator<ArchiveScreens>()
 
-const Calendar: React.FC<{}> = () => {
+const Archive: React.FC<{}> = () => {
   return (
-    <Stack.Navigator initialRouteName="SelectMonth">
-      <Stack.Screen name="SelectMonth" component={SelectMonth} />
+    <Stack.Navigator initialRouteName="SelectMonth" headerMode="none">
+      <Stack.Screen name="SelectMonth" component={SelectMonthInArchive} />
       <Stack.Screen name="Releases" component={Releases} />
       <Stack.Screen name="Release" component={Release} />
     </Stack.Navigator>
   )
 }
 
-export default Calendar
+export default Archive

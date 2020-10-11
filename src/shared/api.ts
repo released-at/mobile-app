@@ -8,11 +8,14 @@ import { endpoints } from './constants'
 // Date format example: 01-2020
 export const releases = (type: ReleaseType, date: DateParams) =>
   fetch(endpoints.RELEASES(type, date)).then(res => res.json())
-export const release = (id: Id) => fetchJSON(endpoints.RELEASE(id))
-export const expect = (id: Id) =>
+export const release = (id: Id) =>
+  fetch(endpoints.RELEASE(id)).then(res => res.json())
+export const expect = ({ id }: { id: Id }) =>
   fetchWithToken(endpoints.EXPECT(id), {
     method: 'post',
   })
+export const today = () => fetchJSON(endpoints.TODAY)
+export const films = () => fetchJSON(endpoints.FILMS)
 
 // Auth
 export const sendConfirmCode = (email: string) =>
@@ -20,7 +23,7 @@ export const sendConfirmCode = (email: string) =>
     method: 'post',
     body: JSON.stringify({ email }),
   })
-export const confirm = (email: string, code: string) =>
+export const confirm = ({ email, code }: { email: string; code: string }) =>
   fetchJSON(endpoints.TOKENS, {
     method: 'post',
     body: JSON.stringify({ email, otp: code }),
@@ -31,5 +34,8 @@ export const logout = () =>
   })
 
 // User
-export const me = (token: string) =>
-  fetchWithToken(endpoints.PROFILE, {}, token)
+export const me = () => fetchWithToken(endpoints.PROFILE)
+
+/* Blog */
+export const posts = () => fetchJSON(endpoints.POSTS)
+export const post = (id: Id) => fetchJSON(endpoints.POST(id))

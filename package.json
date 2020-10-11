@@ -26,23 +26,29 @@
     "expo-linear-gradient": "~8.3.0",
     "expo-secure-store": "~9.2.0",
     "expo-status-bar": "~1.0.2",
+    "formik": "^2.1.5",
     "get-youtube-id": "^1.0.1",
+    "lodash.shuffle": "^4.2.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.0.tar.gz",
+    "react-native-deck-swiper": "^2.0.5",
     "react-native-gesture-handler": "~1.7.0",
+    "react-native-markdown-display": "^6.1.6",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
     "react-native-svg": "12.1.0",
+    "react-native-view-overflow": "^0.0.5",
     "react-native-web": "~0.13.7",
     "react-native-webview": "10.7.0",
     "react-native-youtube-iframe": "^1.2.4",
-    "react-query": "^2.11.1",
+    "react-query": "^2.23.0",
     "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
+    "@types/lodash.shuffle": "^4.2.6",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "@types/styled-components": "^5.1.2",
@@ -75,7 +81,10 @@
       "jsx-a11y",
       "react",
       "react-hooks"
-    ]
+    ],
+    "rules": {
+      "jsx-a11y/accessible-emoji": "off"
+    }
   },
   "prettier": {
     "printWidth": 80,

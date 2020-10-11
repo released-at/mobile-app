@@ -31,4 +31,8 @@ export const endpoints = {
   TOKENS: `${API_URL}/tokens`,
   PROFILE: `${API_URL}/profile`,
   EXPECT: (id: Id) => `${API_URL}/releases/${id}/expect`,
+  POSTS: `${API_URL}/blog_posts`,
+  POST: (id: Id) => `${API_URL}/blog_posts/${id}`,
+  TODAY: `${API_URL}/releases/today`,
+  FILMS: `${API_URL}/films`,
 }

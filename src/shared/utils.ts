@@ -1,50 +1,30 @@
-type FetchResponse<R> = {
-  response?: Response
-  isError: boolean
-  data?: R
-  errorInfo?: unknown
-}
+import { getToken, removeToken } from '../features/user/utils'
 
-async function parse<R>(response: Response): Promise<FetchResponse<R>> {
+async function parse(response, withToken: boolean = false) {
   if (response.status === 204 || response.statusText === 'No Content') {
-    return {
-      isError: false,
-    }
+    return
+  }
+
+  if (withToken && response.status === 401) {
+    await removeToken()
   }
 
   const text = await response.text()
   let data
-
   try {
-    data = JSON.parse(text) as R
-  } catch (error) {
-    console.error(error)
+    data = JSON.parse(text)
+  } catch (e) {
+    console.error(e)
 
-    return {
-      response,
-      isError: true,
-      errorInfo: error,
-    }
+    throw { response, error: e } // eslint-disable-line
   }
-
   if (response.ok) {
-    return {
-      isError: false,
-      data,
-    }
+    return data
   }
-
-  return {
-    response,
-    isError: true,
-    errorInfo: data,
-  }
+  throw { response, error: data } // eslint-disable-line
 }
 
-export async function fetchJSON<R>(
-  input: RequestInfo,
-  init: RequestInit = {},
-): Promise<FetchResponse<R>> {
+export async function fetchJSON(input: RequestInfo, init: RequestInit = {}) {
   const response = await fetch(input, {
     ...init,
     headers: {
@@ -52,15 +32,17 @@ export async function fetchJSON<R>(
       'Content-Type': 'application/json',
     },
   })
-
-  return parse<R>(response)
+  return parse(response)
 }
 
-export async function fetchWithToken<R>(
+export async function fetchWithToken(
   input: RequestInfo,
   init: RequestInit = {},
-  token: string = '',
-): Promise<FetchResponse<R>> {
+) {
+  const token = await getToken()
+
+  if (!token) return
+
   const response = await fetch(input, {
     ...init,
     headers: {
@@ -70,7 +52,7 @@ export async function fetchWithToken<R>(
     },
   })
 
-  return parse<R>(response)
+  return parse(response, true)
 }
 
 export function ifElse(cond: boolean, ifComp: any, elseComp: any = null) {
