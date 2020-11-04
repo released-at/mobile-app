@@ -6,10 +6,10 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Button,
   Keyboard,
 } from 'react-native'
 import { useFormik } from 'formik'
+import Button from '../../components/Button'
 import { setToken } from '../../features/user/utils'
 import { sendConfirmCode, confirm } from '../../shared/api'
 import { endpoints } from '../../shared/constants'
@@ -58,7 +58,7 @@ const SignUp: React.FC = () => {
   } = useFormik({
     initialValues: INITIAL_VALUES,
     validate: values => {
-      let errors = {}
+      let errors: { email?: string; code?: string } = {}
 
       if (currentField === FIELDS.EMAIL && !EMAIL_REGEXP.test(values.email)) {
         errors.email = VALIDATE_ERRORS.EMAIL
@@ -135,11 +135,12 @@ const SignUp: React.FC = () => {
             )}
           </View>
           <Button
-            title="Отправить код"
             onPress={() => {
               handleSubmit()
             }}
-          />
+          >
+            Отправить код
+          </Button>
           {error && <Text style={styles.formError}>{error}</Text>}
         </View>
       )}
@@ -175,11 +176,12 @@ const SignUp: React.FC = () => {
             )}
           </View>
           <Button
-            title="Войти"
             onPress={() => {
               handleSubmit()
             }}
-          />
+          >
+            Войти
+          </Button>
           {error && <Text style={styles.formError}>{error}</Text>}
         </View>
       )}

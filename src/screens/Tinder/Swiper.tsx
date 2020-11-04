@@ -6,11 +6,17 @@ import Card from './Card'
 import IconButton from './IconButton'
 import OverlayLabel from './OverlayLabel'
 
-function Swiper({ films }) {
+import { FilmItem } from '../../types/releases'
+
+interface Props {
+  films: FilmItem[]
+}
+
+function Swiper({ films }: Props) {
   const shuffled = useMemo(() => {
     return shuffle(films)
   }, [films])
-  const swiperRef = useRef<SwiperDeck<unknown>>(null)
+  const swiperRef = useRef<SwiperDeck<FilmItem>>(null)
 
   return (
     <View style={styles.container}>

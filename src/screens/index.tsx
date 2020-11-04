@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { ReactQueryCacheProvider, QueryCache, setConsole } from 'react-query'
-import { BottomTabs } from '../components'
+import BottomTabs from '../components/BottomTabs'
 
 setConsole({
   log: console.log,

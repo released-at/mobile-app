@@ -1,24 +1,26 @@
 import React from 'react'
 import { AppLoading } from 'expo'
 import {
-  Rubik_400Regular_Italic,
-  Rubik_300Light,
-  Rubik_400Regular,
-  Rubik_500Medium,
-  Rubik_700Bold,
+  Inter_400Regular,
+  Inter_600SemiBold,
+  Inter_800ExtraBold,
   useFonts,
-} from '@expo-google-fonts/rubik'
-import { Montserrat_200ExtraLight } from '@expo-google-fonts/montserrat'
+} from '@expo-google-fonts/inter'
+import {
+  PTSerif_400Regular,
+  PTSerif_400Regular_Italic,
+  PTSerif_700Bold,
+} from '@expo-google-fonts/pt-serif'
 import Root from './src/screens'
 
 function App() {
   const [fontsLoaded] = useFonts({
-    Rubik_400Regular_Italic,
-    Rubik_300Light,
-    Rubik_400Regular,
-    Rubik_500Medium,
-    Rubik_700Bold,
-    Montserrat_200ExtraLight,
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Inter_800ExtraBold,
+    PTSerif_400Regular,
+    PTSerif_400Regular_Italic,
+    PTSerif_700Bold,
   })
 
   if (!fontsLoaded) return <AppLoading />

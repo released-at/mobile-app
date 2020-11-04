@@ -1,12 +1,10 @@
 import React from 'react'
 import { SafeAreaView, Text, StyleSheet } from 'react-native'
-import { useQuery } from 'react-query'
 import Swiper from './Swiper'
-import * as api from '../../shared/api'
-import { endpoints } from '../../shared/constants'
+import { useFilms } from '../../features/releases/use-films'
 
 function Tinder() {
-  const { data: films } = useQuery(endpoints.FILMS, api.films)
+  const { films } = useFilms()
 
   if (!films) return null
 

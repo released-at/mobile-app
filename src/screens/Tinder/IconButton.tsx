@@ -1,8 +1,16 @@
 import React from 'react'
+import { GestureResponderEvent } from 'react-native'
 import { TouchableOpacity, StyleSheet } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 
-const IconButton = ({ onPress, name, backgroundColor, color }) => (
+interface Props {
+  onPress: (event: GestureResponderEvent) => void
+  name: string
+  backgroundColor: string
+  color: string
+}
+
+const IconButton = ({ onPress, name, backgroundColor, color }: Props) => (
   <TouchableOpacity
     style={[styles.singleButton, { backgroundColor }]}
     onPress={onPress}

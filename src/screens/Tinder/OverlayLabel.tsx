@@ -1,7 +1,12 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-const OverlayLabel = ({ label, color }) => (
+interface Props {
+  label: string
+  color: string
+}
+
+const OverlayLabel = ({ label, color }: Props) => (
   <View style={[styles.overlayLabel, { borderColor: color }]}>
     <Text style={[styles.overlayLabelText, { color }]}>{label}</Text>
   </View>

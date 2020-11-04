@@ -1,9 +1,14 @@
 import React, { useMemo } from 'react'
-import { Pressable, View, StyleSheet } from 'react-native'
-import { useQueryCache, useMutation, useQuery } from 'react-query'
+import { Pressable, View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import { useQueryCache, useMutation } from 'react-query'
 import Svg, { Path } from 'react-native-svg'
+import { useUser } from '../features/user/use-user'
 import * as api from '../shared/api'
 import { endpoints } from '../shared/constants'
+
+import { ReleaseItem, Release, ReleaseType } from '../types/releases'
+import { ReleaseTypeInApi, ReleaseItemFromApi } from '../types/api'
+import { User } from '../types/user'
 
 function FireOff() {
   return (
@@ -27,31 +32,24 @@ function FireOn() {
   )
 }
 
-function typeAdapter(type) {
-  switch (type) {
-    case 'films':
-    case 'movie':
-    case 'movies':
-      return 'movies'
-    case 'games':
-    case 'game':
-      return 'games'
-    case 'series':
-    case 'serial':
-    case 'serials':
-      return 'serials'
-  }
+const typeDict = {
+  [ReleaseType.Films]: ReleaseTypeInApi.Films,
+  [ReleaseType.Games]: ReleaseTypeInApi.Games,
+  [ReleaseType.Series]: ReleaseTypeInApi.Series,
 }
 
-function ExpectButton({ style, release, type: normalizedType }) {
-  const type = useMemo(() => typeAdapter(normalizedType), [
-    normalizedType,
-  ]) as string
+interface Props {
+  style?: StyleProp<ViewStyle>
+  release: ReleaseItem | Release
+}
+
+function ExpectButton({ style, release }: Props) {
   const { PROFILE } = endpoints
+  const type = typeDict[release.type]
 
   const cache = useQueryCache()
 
-  const { data } = useQuery(PROFILE, () => api.me(), { retry: false })
+  const { user } = useUser()
 
   const [expect] = useMutation(api.expect, {
     onMutate: ({ id }) => {
@@ -59,22 +57,25 @@ function ExpectButton({ style, release, type: normalizedType }) {
 
       const prevValue = cache.getQueryData(PROFILE)
 
-      cache.setQueryData(PROFILE, cachedUser => {
-        const set = new Set(cachedUser.expected[type].map(i => i.release_id))
+      cache.setQueryData(PROFILE, savedUser => {
+        const user = savedUser as User
 
-        const optimisticResponse = {
-          ...cachedUser,
+        const releases: ReleaseItemFromApi[] = user.expected[type]
+        const releaseIdsSet = new Set(
+          releases.map(release => release.release_id),
+        )
+
+        const response = {
+          current_user: user.current_user,
           expected: {
-            ...cachedUser.expected,
-            [type]: set.has(id)
-              ? cachedUser.expected[type].filter(
-                  ({ release_id }) => release_id !== id,
-                )
-              : [...cachedUser.expected[type], release],
+            ...user.expected,
+            [type]: releaseIdsSet.has(id)
+              ? releases.filter(release => release.release_id !== id)
+              : [...releases, release],
           },
         }
 
-        return optimisticResponse
+        return response
       })
 
       return prevValue
@@ -87,25 +88,24 @@ function ExpectButton({ style, release, type: normalizedType }) {
   })
 
   async function onPress() {
-    if (!data) return
+    if (!user) return
 
     await expect({ id: release.release_id })
   }
 
-  const idsSet = useMemo(() => {
-    if (!data) return new Set()
+  const releaseIdsSet = useMemo(() => {
+    if (!user) return new Set()
 
-    return new Set(data.expected[type].map(i => i.release_id))
-  }, [data, type])
+    const releases: ReleaseItemFromApi[] = user.expected[type]
+
+    return new Set(releases.map(release => release.release_id))
+  }, [user, type])
 
   return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) =>
-        pressed ? [styles.button, style] : [styles.button, style]
-      }
-    >
-      <View>{idsSet.has(release.release_id) ? <FireOn /> : <FireOff />}</View>
+    <Pressable onPress={onPress} style={[styles.button, style]}>
+      <View>
+        {releaseIdsSet.has(release.release_id) ? <FireOn /> : <FireOff />}
+      </View>
     </Pressable>
   )
 }

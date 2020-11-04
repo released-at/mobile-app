@@ -9,38 +9,41 @@ import {
   StyleSheet,
 } from 'react-native'
 import { compareAsc } from 'date-fns/esm'
-import { ReleaseList } from '../../components'
+import ReleaseList from '../../components/ReleaseList'
+import Button from '../../components/Button'
 import { useUser } from '../../features/user/use-user'
 import { removeToken } from '../../features/user/utils'
+import { releaseItemAdapter } from '../../shared/utils'
 import { logout } from '../../shared/api'
 import { endpoints } from '../../shared/constants'
 
-function actual(arr) {
-  return arr.filter(i => compareAsc(new Date(), new Date(i.released)) <= 0)
-}
+import { MeStackNavProps } from '../../types/screens'
+import { ReleaseType, ReleaseItem } from '../../types/releases'
+import { ReleaseItemFromApi } from '../../types/api'
 
-function nonActual(arr) {
-  return arr.filter(i => compareAsc(new Date(), new Date(i.released)) > 0)
-}
-
-function prepareData(arr) {
+function prepareData(
+  arr: ReleaseItemFromApi[],
+): {
+  actual: ReleaseItem[]
+  nonActual: ReleaseItem[]
+} {
   let result = {
     actual: [],
     nonActual: [],
   }
 
-  arr.forEach(i => {
-    if (compareAsc(new Date(), new Date(i.released)) <= 0) {
-      result.actual.push(i)
+  arr.forEach(release => {
+    if (compareAsc(new Date(), new Date(release.released)) <= 0) {
+      ;(result.actual as ReleaseItem[]).push(releaseItemAdapter(release))
     } else {
-      result.nonActual.push(i)
+      ;(result.nonActual as ReleaseItem[]).push(releaseItemAdapter(release))
     }
   })
 
   return result
 }
 
-const Me: React.FC = () => {
+const Me: React.FC<MeStackNavProps<'Me'>> = () => {
   const queryCache = useQueryCache()
   const [signOut] = useMutation(logout, {
     onSuccess: async () => {
@@ -57,6 +60,8 @@ const Me: React.FC = () => {
       </SafeAreaView>
     )
   }
+
+  if (!user) return null
 
   const { expected } = user
 
@@ -89,13 +94,13 @@ const Me: React.FC = () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Ожидаемые релизы</Text>
             {films.actual.length > 0 && (
-              <ReleaseList type="films" releases={films.actual} />
+              <ReleaseList type={ReleaseType.Films} releases={films.actual} />
             )}
             {games.actual.length > 0 && (
-              <ReleaseList type="games" releases={games.actual} />
+              <ReleaseList type={ReleaseType.Games} releases={games.actual} />
             )}
             {series.actual.length > 0 && (
-              <ReleaseList type="series" releases={series.actual} />
+              <ReleaseList type={ReleaseType.Series} releases={series.actual} />
             )}
           </View>
         )}
@@ -103,16 +108,32 @@ const Me: React.FC = () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Уже вышли</Text>
             {films.nonActual.length > 0 && (
-              <ReleaseList type="films" releases={films.nonActual} />
+              <ReleaseList
+                type={ReleaseType.Films}
+                releases={films.nonActual}
+              />
             )}
             {games.nonActual.length > 0 && (
-              <ReleaseList type="games" releases={games.nonActual} />
+              <ReleaseList
+                type={ReleaseType.Games}
+                releases={games.nonActual}
+              />
             )}
             {series.nonActual.length > 0 && (
-              <ReleaseList type="series" releases={series.nonActual} />
+              <ReleaseList
+                type={ReleaseType.Series}
+                releases={series.nonActual}
+              />
             )}
           </View>
         )}
+        <Button
+          onPress={() => {
+            signOut()
+          }}
+        >
+          Выйти
+        </Button>
       </ScrollView>
     </SafeAreaView>
   )

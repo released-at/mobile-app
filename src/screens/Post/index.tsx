@@ -8,16 +8,16 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native'
-import { useQuery } from 'react-query'
-import Markdown from 'react-native-markdown-display'
+import Markdown, { RenderRules } from 'react-native-markdown-display'
 import YoutubePlayer from 'react-native-youtube-iframe'
 import getYoutubeId from 'get-youtube-id'
-import * as api from '../../shared/api'
-import { endpoints } from '../../shared/constants'
+import { usePost } from '../../features/blog/use-post'
+
+import { BlogStackNavProps } from '../../types/screens'
 
 const fullWidth = Dimensions.get('window').width
 
-const rules = {
+const rules: RenderRules = {
   link: (node, children, parent, styles) => {
     if (node.attributes.href.includes('youtube')) {
       const youtubeId = getYoutubeId(node.attributes.href) as string
@@ -47,11 +47,11 @@ const rules = {
   },
 }
 
-function Post({ route }) {
+const Post: React.FC<BlogStackNavProps<'Post'>> = ({ route }) => {
   const { id } = route.params
-  const { data } = useQuery(endpoints.POST(id), () => api.post(id))
+  const { post } = usePost(id)
 
-  if (!data) return null
+  if (!post) return null
 
   return (
     <>
@@ -61,7 +61,7 @@ function Post({ route }) {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.container}
         >
-          <Text style={styles.title}>{data.post.title}</Text>
+          <Text style={styles.title}>{post.title}</Text>
           <Markdown
             rules={rules}
             style={{
@@ -72,7 +72,7 @@ function Post({ route }) {
               },
             }}
           >
-            {data.post.body}
+            {post.body}
           </Markdown>
         </ScrollView>
       </SafeAreaView>

@@ -7,16 +7,16 @@ import {
   Pressable,
   StyleSheet,
 } from 'react-native'
-import { useQuery } from 'react-query'
 import { format } from 'date-fns/esm'
 import { ru } from 'date-fns/esm/locale'
-import * as api from '../../shared/api'
-import { endpoints } from '../../shared/constants'
+import { usePosts } from '../../features/blog/use-posts'
 
-function Posts({ navigation }) {
-  const { data } = useQuery(endpoints.POSTS, api.posts)
+import { BlogStackNavProps } from '../../types/screens'
 
-  if (!data) return null
+const Posts: React.FC<BlogStackNavProps<'Posts'>> = ({ navigation }) => {
+  const { posts } = usePosts()
+
+  if (!posts) return null
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -26,8 +26,8 @@ function Posts({ navigation }) {
       >
         <Text style={styles.title}>Блог</Text>
         <View>
-          {data.posts.map(post => {
-            const date = new Date(post.updated_at.split(' ')[0])
+          {posts.map(post => {
+            const date = new Date(post.created_at * 1000)
 
             return (
               <Pressable

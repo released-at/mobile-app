@@ -1,9 +1,15 @@
 import React from 'react'
 import { View, Text, Image, Dimensions, StyleSheet } from 'react-native'
 
+import { FilmItem } from '../../types/releases'
+
 const { height } = Dimensions.get('window')
 
-const Card = ({ card }) => (
+interface Props {
+  card: FilmItem
+}
+
+const Card = ({ card }: Props) => (
   <View style={styles.card}>
     <Image
       style={styles.image}

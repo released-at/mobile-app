@@ -1,19 +1,29 @@
 import React from 'react'
-import { View, Text, FlatList, StyleSheet } from 'react-native'
+import { View, FlatList, StyleSheet } from 'react-native'
+import { compareAsc } from 'date-fns/esm'
 import ReleaseCard from './ReleaseCard'
+import Title from '../components/Title'
+import { ReleaseType, ReleaseItem } from '../types/releases'
 
 const typeDict = {
-  films: 'Кино',
-  games: 'Игры',
-  series: 'Сериалы',
+  [ReleaseType.Films]: 'Кино',
+  [ReleaseType.Games]: 'Игры',
+  [ReleaseType.Series]: 'Сериалы',
 }
 
-const ReleaseList: React.FC = ({ releases, type }) => {
+interface Props {
+  releases: ReleaseItem[]
+  type: ReleaseType
+}
+
+const ReleaseList: React.FC<Props> = ({ releases, type }) => {
   return (
     <View style={styles.list}>
-      <Text style={styles.title}>{typeDict[type]}</Text>
+      <Title h2>{typeDict[type]}</Title>
       <FlatList
-        data={releases}
+        data={releases.sort((a, b) =>
+          compareAsc(new Date(a.released), new Date(b.released)),
+        )}
         renderItem={({ item }) => (
           <ReleaseCard style={styles.card} type={type} release={item} />
         )}
@@ -27,7 +37,7 @@ const ReleaseList: React.FC = ({ releases, type }) => {
 
 const styles = StyleSheet.create({
   list: {
-    marginBottom: 20,
+    marginBottom: 32,
   },
   title: {
     fontWeight: 'bold',

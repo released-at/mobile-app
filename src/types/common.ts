@@ -18,3 +18,10 @@ export type DateParams = {
   month: MonthCalendarNumber
   year: number
 }
+
+export type Month = {
+  rus: string
+  eng: string
+  jsNumber: number
+  calendarNumber: number
+}

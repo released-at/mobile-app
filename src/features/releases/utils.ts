@@ -1,14 +1,7 @@
-import { MonthCalendarNumber, DateParams } from '../../types/common'
 import { addMonths, isEqual } from 'date-fns/esm'
 import { months } from '../../shared/constants'
-// import addMonths from 'date-fns/addMonths'
-// import eachMonthOfInterval from 'date-fns/eachMonthOfInterval'
-// import format from 'date-fns/format'
-// import isEqual from 'date-fns/isEqual'
-// import startOfMonth from 'date-fns/startOfMonth'
-// import getDaysInMonth from 'date-fns/getDaysInMonth'
-// import locale from 'date-fns/locale/ru'
-// import { months } from 'shared/constants'
+
+import { MonthCalendarNumber, DateParams } from '../../types/common'
 
 export function toNextMonth({ month, year }: DateParams): DateParams {
   const isDecember = month === 12

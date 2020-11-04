@@ -1,7 +1,11 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Feather } from '@expo/vector-icons'
-import { Calendar, Archive, Me, Blog, Tinder } from '../stacks'
+import Calendar from '../stacks/Calendar'
+import Tinder from '../stacks/Tinder'
+import Archive from '../stacks/Archive'
+import Me from '../stacks/Me'
+import Blog from '../stacks/Blog'
 import { TabScreens } from '../types/screens'
 
 const Tabs = createBottomTabNavigator<TabScreens>()

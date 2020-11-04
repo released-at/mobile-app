@@ -1,16 +1,11 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import { getFont } from '../shared/utils'
 
-type Platform =
-  | 'pc'
-  | 'ps_4'
-  | 'ps_5'
-  | 'xbox_one'
-  | 'xbox_series'
-  | 'nintendo_switch'
+import { GamePlatform } from '../types/releases'
 
 interface PlatformProps {
-  platform: Platform
+  platform: GamePlatform
 }
 
 const platformDict = {
@@ -32,7 +27,7 @@ const Platform = ({ platform }: PlatformProps) => {
   )
 }
 
-const GamePlatformList = ({ platforms }: { platforms: Platform[] }) => {
+const GamePlatformList = ({ platforms }: { platforms: GamePlatform[] }) => {
   return (
     <View style={styles.container}>
       {platforms.map(platform => (
@@ -51,13 +46,14 @@ const styles = StyleSheet.create({
   },
   platform: {
     margin: 4,
-    paddingVertical: 4,
+    paddingVertical: 2,
     paddingHorizontal: 8,
-    borderRadius: 12,
+    borderRadius: 16,
   },
   title: {
     fontWeight: 'bold',
     fontSize: 12,
+    fontFamily: getFont('primary', 600),
   },
 })
 

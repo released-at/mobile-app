@@ -1,16 +1,16 @@
 import React from 'react'
-import { SafeAreaView, ScrollView, View, Text, StyleSheet } from 'react-native'
+import { SafeAreaView, ScrollView, Text, StyleSheet } from 'react-native'
 import { useQuery } from 'react-query'
-import { ReleaseCard } from '../../components'
+import ReleaseCard from '../../components/ReleaseCard'
 import * as api from '../../shared/api'
 import { endpoints } from '../../shared/constants'
 
+import { ReleaseItem } from '../../types/releases'
+
 function Today() {
-  const { data } = useQuery(endpoints.TODAY, api.today)
+  const { data } = useQuery<ReleaseItem[]>(endpoints.TODAY, api.today)
 
   if (!data) return null
-
-  console.log(data)
 
   return (
     <SafeAreaView style={styles.safe}>

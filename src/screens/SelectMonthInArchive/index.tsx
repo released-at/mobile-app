@@ -15,6 +15,8 @@ import {
 } from 'date-fns/esm'
 import { ru } from 'date-fns/esm/locale'
 
+import { ArchiveStackNavProps } from '../../types/screens'
+
 const interval = {
   start: new Date(2020, 0, 1),
   end: addMonths(new Date(), -1),
@@ -33,7 +35,9 @@ yearsInterval.forEach(date => {
   }))
 })
 
-const SelectMonthInArchive: React.FC = ({ navigation }) => {
+const SelectMonthInArchive: React.FC<ArchiveStackNavProps<'SelectMonth'>> = ({
+  navigation,
+}) => {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView style={styles.container}>

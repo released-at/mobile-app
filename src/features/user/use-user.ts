@@ -2,6 +2,8 @@ import { useQuery } from 'react-query'
 import { getToken, removeToken } from './utils'
 import { endpoints } from '../../shared/constants'
 
+import { User } from '../../types/user'
+
 async function fetchWithToken() {
   const token = await getToken()
 
@@ -20,7 +22,7 @@ async function fetchWithToken() {
 }
 
 export function useUser() {
-  const { isLoading, error, data } = useQuery(
+  const { isLoading, error, data } = useQuery<User>(
     endpoints.PROFILE,
     fetchWithToken,
     { retry: false, refetchOnMount: true, refetchOnReconnect: true },

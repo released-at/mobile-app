@@ -4,24 +4,28 @@ import {
   ScrollView,
   ImageBackground,
   View,
-  Text,
   Dimensions,
   TouchableHighlight,
   Modal,
   StyleSheet,
+  Platform,
 } from 'react-native'
-import { useQuery } from 'react-query'
 import Svg, { Path } from 'react-native-svg'
 import YoutubePlayer from 'react-native-youtube-iframe'
 import getYoutubeId from 'get-youtube-id'
 import { format } from 'date-fns/esm'
 import { ru } from 'date-fns/esm/locale'
 import { LinearGradient } from 'expo-linear-gradient'
+import FilmButtons from './FilmButtons'
 import GamePlatformList from '../../components/GamePlatformList'
 import ExpectButton from '../../components/ExpectButton'
-import * as api from '../../shared/api'
-import { ifElse } from '../../shared/utils'
-import { endpoints } from '../../shared/constants'
+import Text from '../../components/Text'
+import Title from '../../components/Title'
+import { getFont } from '../../shared/utils'
+import { useRelease } from '../../features/releases/use-release'
+
+import { CalendarStackNavProps } from '../../types/screens'
+import { ReleaseType } from '../../types/releases'
 
 const windowHeight = Dimensions.get('window').height
 
@@ -36,16 +40,14 @@ function Play() {
   )
 }
 
-const Release: React.FC = ({ route }) => {
+const Release: React.FC<CalendarStackNavProps<'Release'>> = ({ route }) => {
   const [showTrailer, setShowTrailer] = useState(false)
   const { id } = route.params
-  const { data: release } = useQuery(endpoints.RELEASE(id), () =>
-    api.release(id),
-  )
+  const { release } = useRelease(id)
 
   if (!release) return null
 
-  const youtubeId = getYoutubeId(release?.trailer_url || '')
+  const youtubeId = getYoutubeId(release.trailer)
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -53,16 +55,12 @@ const Release: React.FC = ({ route }) => {
         <View style={styles.header}>
           <View style={styles.releaseDate}>
             <Text style={styles.date}>
-              {format(new Date(release.released), 'd MMM, EEEEEE', {
+              {format(new Date(release.released), 'EEEEEE, d MMM', {
                 locale: ru,
               })}
             </Text>
           </View>
-          <ExpectButton
-            style={styles.expect}
-            type={release.type}
-            release={{ ...release, release_id: id }}
-          />
+          <ExpectButton release={release} />
         </View>
         <TouchableHighlight
           onPress={() => {
@@ -107,33 +105,52 @@ const Release: React.FC = ({ route }) => {
         </Modal>
         <View style={styles.content}>
           <View style={styles.titles}>
-            <Text style={styles.title}>{release.title}</Text>
-            {ifElse(
-              release.original_title,
-              <Text style={styles.originalTitle}>
+            <Title h1 style={styles.title}>
+              {release.title}
+            </Title>
+            {release.type === ReleaseType.Films && (
+              <Title h2 style={styles.originalTitle}>
                 {release.original_title}
-              </Text>,
+              </Title>
             )}
           </View>
           <View style={styles.info}>
-            {ifElse(
-              release.type === 'movie',
+            {release.type === ReleaseType.Films && (
               <Text style={styles.extra}>
-                <Text style={styles.semiBold}>Режиссёр</Text> {release.director}
-              </Text>,
+                <Text fontWeight={600}>Режиссёр:</Text> {release.director}
+              </Text>
             )}
-            {ifElse(
-              release.type === 'game',
-              <GamePlatformList platforms={release.platforms} />,
+            {release.type === ReleaseType.Games && (
+              <GamePlatformList platforms={release.platforms} />
             )}
-            {ifElse(
-              release.type === 'serial',
+            {release.type === ReleaseType.Series && (
               <Text style={styles.extra}>
-                <Text style={styles.semiBold}>Сезон</Text> {release.season}
-              </Text>,
+                <Text fontWeight={600}>Сезон:</Text> {release.season}
+              </Text>
             )}
           </View>
-          <Text style={styles.desc}>{release.description}</Text>
+          <View>
+            <Text style={styles.desc}>{release.description}</Text>
+            {(release.type === ReleaseType.Films ||
+              release.type === ReleaseType.Series) && (
+              <FilmButtons
+                imdb={{
+                  link: release.kinopoisk_url,
+                  rating:
+                    release.type === ReleaseType.Films
+                      ? release.ratings.imdb
+                      : undefined,
+                }}
+                kinopoisk={{
+                  link: release.imdb_url,
+                  rating:
+                    release.type === ReleaseType.Films
+                      ? release.ratings.kinopoisk
+                      : undefined,
+                }}
+              />
+            )}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -149,27 +166,30 @@ const styles = StyleSheet.create({
   header: {
     position: 'absolute',
     paddingHorizontal: 16,
-    top: 16,
     zIndex: 2,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     width: '100%',
+    ...Platform.select({
+      ios: {
+        top: 16,
+      },
+      android: {
+        top: 28,
+      },
+    }),
   },
   releaseDate: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 16,
+    paddingVertical: 2,
+    paddingHorizontal: 12,
+  },
+  date: {
+    fontFamily: getFont('primary', 600),
+    color: '#fff',
   },
   trailer: {
     flex: 1,
@@ -191,9 +211,6 @@ const styles = StyleSheet.create({
   close: {
     color: '#fff',
     fontSize: 20,
-  },
-  date: {
-    fontWeight: 'bold',
   },
   cover: {
     width: '100%',
@@ -238,25 +255,26 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: {
-    fontSize: 40,
-    fontWeight: '900',
+    marginBottom: 0,
   },
   originalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    marginBottom: 0,
     color: '#7e8a97',
-    marginTop: 2,
-  },
-  desc: {
-    fontSize: 16,
-    lineHeight: 22,
-    marginBottom: 8,
   },
   extra: {
     fontSize: 16,
   },
-  semiBold: {
-    fontWeight: '600',
+  desc: {
+    marginBottom: 24,
+  },
+  filmButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  filmButton: {
+    flex: 1,
   },
 })
 
