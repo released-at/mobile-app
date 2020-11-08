@@ -4,11 +4,12 @@ import {
   SafeAreaView,
   ScrollView,
   View,
-  Text,
   ActivityIndicator,
   StyleSheet,
 } from 'react-native'
 import { compareAsc } from 'date-fns/esm'
+import Title from '../../components/Title'
+import Text from '../../components/Text'
 import ReleaseList from '../../components/ReleaseList'
 import Button from '../../components/Button'
 import { useUser } from '../../features/user/use-user'
@@ -69,14 +70,17 @@ const Me: React.FC<MeStackNavProps<'Me'>> = () => {
   const games = prepareData(expected.games)
   const series = prepareData(expected.serials)
 
-  const hasActual = [...films.actual, games.actual, series.actual].length > 0
+  const hasActual =
+    [...films.actual, ...games.actual, ...series.actual].length > 0
   const hasNonActual =
     [...films.nonActual, ...games.nonActual, ...series.nonActual].length > 0
 
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView style={styles.screen}>
-        <Text style={styles.title}>Личный кабинет</Text>
+        <Title h1 style={styles.title}>
+          Личный кабинет
+        </Title>
         {!hasActual && !hasNonActual && (
           <View>
             <Text style={styles.desc}>
@@ -90,23 +94,34 @@ const Me: React.FC<MeStackNavProps<'Me'>> = () => {
             </Text>
           </View>
         )}
-        {hasActual && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Ожидаемые релизы</Text>
-            {films.actual.length > 0 && (
-              <ReleaseList type={ReleaseType.Films} releases={films.actual} />
-            )}
-            {games.actual.length > 0 && (
-              <ReleaseList type={ReleaseType.Games} releases={games.actual} />
-            )}
-            {series.actual.length > 0 && (
-              <ReleaseList type={ReleaseType.Series} releases={series.actual} />
-            )}
-          </View>
-        )}
+        <View style={styles.section}>
+          <Title h2 style={styles.sectionTitle}>
+            Ожидаемые релизы
+          </Title>
+          {hasActual ? (
+            <>
+              {films.actual.length > 0 && (
+                <ReleaseList type={ReleaseType.Films} releases={films.actual} />
+              )}
+              {games.actual.length > 0 && (
+                <ReleaseList type={ReleaseType.Games} releases={games.actual} />
+              )}
+              {series.actual.length > 0 && (
+                <ReleaseList
+                  type={ReleaseType.Series}
+                  releases={series.actual}
+                />
+              )}
+            </>
+          ) : (
+            <Text>Нет ожидаемых релизов</Text>
+          )}
+        </View>
         {hasNonActual && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Уже вышли</Text>
+            <Title h2 style={styles.sectionTitle}>
+              Уже вышли
+            </Title>
             {films.nonActual.length > 0 && (
               <ReleaseList
                 type={ReleaseType.Films}
@@ -128,6 +143,11 @@ const Me: React.FC<MeStackNavProps<'Me'>> = () => {
           </View>
         )}
         <Button
+          extendedStyle={{
+            button: () => ({
+              marginBottom: 24,
+            }),
+          }}
           onPress={() => {
             signOut()
           }}
@@ -152,9 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   title: {
-    fontWeight: '900',
-    fontSize: 36,
-    marginVertical: 16,
+    marginTop: 16,
   },
   desc: {
     lineHeight: 20,
@@ -163,8 +181,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   sectionTitle: {
-    fontWeight: '700',
-    fontSize: 28,
     marginBottom: 4,
   },
 })

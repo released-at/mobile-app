@@ -3,15 +3,16 @@ import { useMutation, useQueryCache } from 'react-query'
 import {
   SafeAreaView,
   View,
-  Text,
   StyleSheet,
   TextInput,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native'
 import { useFormik } from 'formik'
 import Button from '../../components/Button'
+import Text from '../../components/Text'
 import { setToken } from '../../features/user/utils'
-import { sendConfirmCode, confirm } from '../../shared/api'
+import { sendConfirmCode, confirm, me } from '../../shared/api'
 import { endpoints } from '../../shared/constants'
 
 const EMAIL_REGEXP = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
@@ -40,10 +41,11 @@ const SignUp: React.FC = () => {
     if (error) setError(null)
   }, [error])
 
-  const [signIn] = useMutation(confirm, {
-    onSuccess: async ({ token, current_user }) => {
+  const [signIn, { isLoading }] = useMutation(confirm, {
+    onSuccess: async ({ token }) => {
       await setToken(token)
-      queryCache.setQueryData(endpoints.PROFILE, current_user)
+      const user = await me()
+      queryCache.setQueryData(endpoints.PROFILE, user)
     },
     throwOnError: true,
   })
@@ -119,6 +121,7 @@ const SignUp: React.FC = () => {
               style={styles.input}
               placeholder="Email"
               textContentType="emailAddress"
+              placeholderTextColor="#f5f5f5"
               autoCapitalize="none"
               autoCorrect={false}
               onChangeText={handleChange('email')}
@@ -135,6 +138,11 @@ const SignUp: React.FC = () => {
             )}
           </View>
           <Button
+            extendedStyle={{
+              button: () => ({
+                width: '100%',
+              }),
+            }}
             onPress={() => {
               handleSubmit()
             }}
@@ -158,6 +166,7 @@ const SignUp: React.FC = () => {
             <TextInput
               style={styles.input}
               placeholder="Код"
+              placeholderTextColor="#f5f5f5"
               maxLength={4}
               textContentType="telephoneNumber"
               autoCapitalize="none"
@@ -176,11 +185,16 @@ const SignUp: React.FC = () => {
             )}
           </View>
           <Button
+            extendedStyle={{
+              button: () => ({
+                width: '100%',
+              }),
+            }}
             onPress={() => {
               handleSubmit()
             }}
           >
-            Войти
+            {isLoading ? <ActivityIndicator size="small" /> : 'Войти'}
           </Button>
           {error && <Text style={styles.formError}>{error}</Text>}
         </View>
@@ -210,9 +224,10 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: 40,
-    backgroundColor: 'rgba(0, 0, 0, 0.12)',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     paddingHorizontal: 16,
     borderRadius: 8,
+    color: '#f5f5f5',
   },
   error: {
     position: 'absolute',

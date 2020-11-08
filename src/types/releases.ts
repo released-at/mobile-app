@@ -69,8 +69,8 @@ export type Film = CommonReleaseProps & {
   imdb_url: string
   type: ReleaseType.Films
   ratings: {
-    imdb: number
-    kinopoisk: number
+    imdb: string
+    kinopoisk: string
   }
 }
 

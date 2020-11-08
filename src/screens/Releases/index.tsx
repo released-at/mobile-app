@@ -1,9 +1,15 @@
 import React, { useState, useCallback } from 'react'
-import { ScrollView, StyleSheet, SafeAreaView } from 'react-native'
+import {
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  ActivityIndicator,
+} from 'react-native'
 import Header from './Header'
 import ReleaseList from '../../components/ReleaseList'
+import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
 import { toNextMonth, toPrevMonth } from '../../features/releases/utils'
-import { useReleases } from '../../shared/hooks'
+import { useReleases } from '../../features/releases/use-releases'
 import { months } from '../../shared/constants'
 import { ReleaseType } from '../../types/releases'
 import { DateParams, MonthCalendarNumber } from '../../types/common'
@@ -40,6 +46,7 @@ const Releases: React.FC<CalendarStackNavProps<'Releases'>> = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.safe}>
+      <FocusAwareStatusBar backgroundColor="#0b0b0b" />
       <Header
         month={months[date.month - 1]}
         year={date.year}
@@ -50,13 +57,19 @@ const Releases: React.FC<CalendarStackNavProps<'Releases'>> = ({ route }) => {
       <ScrollView contentContainerStyle={styles.container}>
         {films.data ? (
           <ReleaseList type={ReleaseType.Films} releases={films.data} />
-        ) : null}
+        ) : (
+          <ActivityIndicator />
+        )}
         {games.data ? (
           <ReleaseList type={ReleaseType.Games} releases={games.data} />
-        ) : null}
+        ) : (
+          <ActivityIndicator />
+        )}
         {series.data ? (
           <ReleaseList type={ReleaseType.Series} releases={series.data} />
-        ) : null}
+        ) : (
+          <ActivityIndicator />
+        )}
       </ScrollView>
     </SafeAreaView>
   )

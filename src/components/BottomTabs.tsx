@@ -30,7 +30,12 @@ const BottomTabs: React.FC<{}> = () => {
         tabBarLabel: () => null,
       })}
       tabBarOptions={{
+        style: {
+          borderTopColor: 'rgb(77, 77, 77)',
+          backgroundColor: '#000',
+        },
         activeTintColor: '#4287f5',
+        inactiveTintColor: '#e8e8e8',
       }}
     >
       <Tabs.Screen name="Calendar" component={Calendar} />

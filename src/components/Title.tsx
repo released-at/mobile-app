@@ -71,7 +71,9 @@ const Title = ({
 }
 
 const styles = StyleSheet.create({
-  base: {},
+  base: {
+    color: '#f5f5f5',
+  },
 
   h1: {
     marginBottom: 16,

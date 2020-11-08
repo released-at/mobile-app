@@ -1,6 +1,9 @@
 import React from 'react'
-import { SafeAreaView, Text, StyleSheet } from 'react-native'
+import { SafeAreaView, StyleSheet } from 'react-native'
+import Constants from 'expo-constants'
 import Swiper from './Swiper'
+import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
+import Title from '../../components/Title'
 import { useFilms } from '../../features/releases/use-films'
 
 function Tinder() {
@@ -10,7 +13,10 @@ function Tinder() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <Text style={styles.title}>Выберите{'\n'}фильм</Text>
+      <FocusAwareStatusBar backgroundColor="#0b0b0b" />
+      <Title style={styles.title} h1>
+        Кинотиндер
+      </Title>
       <Swiper films={films} />
     </SafeAreaView>
   )
@@ -21,9 +27,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontWeight: '900',
-    fontSize: 36,
-    marginVertical: 16,
+    marginTop: Constants.statusBarHeight,
     paddingHorizontal: 16,
   },
 })

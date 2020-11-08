@@ -1,17 +1,13 @@
 import React from 'react'
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  Linking,
-  StyleSheet,
-  Dimensions,
-} from 'react-native'
+import { Dimensions, Image } from 'react-native'
 import Markdown, { RenderRules } from 'react-native-markdown-display'
 import YoutubePlayer from 'react-native-youtube-iframe'
+import * as Linking from 'expo-linking'
 import getYoutubeId from 'get-youtube-id'
+import ScreenWrapper from '../../components/ScreenWrapper'
+import Text from '../../components/Text'
 import { usePost } from '../../features/blog/use-post'
+import { getFont } from '../../shared/utils'
 
 import { BlogStackNavProps } from '../../types/screens'
 
@@ -26,7 +22,7 @@ const rules: RenderRules = {
         <YoutubePlayer
           key={node.key}
           width={fullWidth - 32}
-          height={270}
+          height={220}
           videoId={youtubeId}
           initialPlayerParams={{}}
         />
@@ -54,45 +50,50 @@ const Post: React.FC<BlogStackNavProps<'Post'>> = ({ route }) => {
   if (!post) return null
 
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.safe}>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.container}
-        >
-          <Text style={styles.title}>{post.title}</Text>
-          <Markdown
-            rules={rules}
-            style={{
-              body: {
-                fontSize: 18,
-                lineHeight: 28,
-                marginBottom: 28,
-              },
-            }}
-          >
-            {post.body}
-          </Markdown>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <ScreenWrapper title={post.title}>
+      <Image
+        source={{ uri: post.cover }}
+        style={{ width: '100%', height: 250 }}
+      />
+      <Markdown
+        rules={rules}
+        style={{
+          body: {
+            fontSize: 18,
+            lineHeight: 28,
+            marginBottom: 28,
+            color: '#f5f5f5',
+          },
+          heading2: {
+            fontFamily: getFont('primary', 800),
+            fontSize: 24,
+            lineHeight: 24 * 1.4,
+            letterSpacing: -0.33,
+          },
+          link: {
+            textDecorationLine: 'none',
+          },
+          paragraph: {
+            fontSize: 18,
+            lineHeight: 28,
+            fontFamily: getFont('secondary', 400),
+          },
+          em: {
+            fontSize: 18,
+            fontStyle: 'normal',
+            fontFamily: getFont('secondary', 400, true),
+          },
+          image: {
+            width: '100%',
+            height: 250,
+            flex: 1,
+          },
+        }}
+      >
+        {post.body}
+      </Markdown>
+    </ScreenWrapper>
   )
 }
-
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-  },
-  container: {
-    height: '100%',
-    paddingHorizontal: 16,
-  },
-  title: {
-    fontWeight: '900',
-    fontSize: 36,
-    marginVertical: 16,
-  },
-})
 
 export default Post

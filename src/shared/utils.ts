@@ -147,11 +147,11 @@ export function releaseAdapter(release: ReleaseFromApi): Release {
         imdb_url: release.imdb_url,
         ratings: {
           imdb: release.foreign_ratings?.imdb_rating
-            ? +release.foreign_ratings.imdb_rating.toFixed(1)
-            : 0,
+            ? release.foreign_ratings.imdb_rating.toFixed(1)
+            : '',
           kinopoisk: release.foreign_ratings?.kinopoisk_rating
-            ? +release.foreign_ratings.kinopoisk_rating.toFixed(1)
-            : 0,
+            ? release.foreign_ratings.kinopoisk_rating.toFixed(1)
+            : '',
         },
         type: ReleaseType.Films,
       }

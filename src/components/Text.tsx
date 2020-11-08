@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   base: {
     fontSize: 16,
     lineHeight: 16 * 1.5,
+    color: '#f5f5f5',
   },
   primary: {
     fontFamily: getFont('primary', 400),

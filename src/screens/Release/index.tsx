@@ -1,22 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   SafeAreaView,
   ScrollView,
   ImageBackground,
   View,
   Dimensions,
-  TouchableHighlight,
-  Modal,
+  Pressable,
   StyleSheet,
-  Platform,
 } from 'react-native'
 import Svg, { Path } from 'react-native-svg'
-import YoutubePlayer from 'react-native-youtube-iframe'
-import getYoutubeId from 'get-youtube-id'
 import { format } from 'date-fns/esm'
 import { ru } from 'date-fns/esm/locale'
+import Constants from 'expo-constants'
 import { LinearGradient } from 'expo-linear-gradient'
+import * as Linking from 'expo-linking'
 import FilmButtons from './FilmButtons'
+import GameStoreButtons from './GameStoreButtons'
+import Articles from './Articles'
+import FocusAwareStatus from '../../components/FocusAwareStatusBar'
 import GamePlatformList from '../../components/GamePlatformList'
 import ExpectButton from '../../components/ExpectButton'
 import Text from '../../components/Text'
@@ -25,7 +26,7 @@ import { getFont } from '../../shared/utils'
 import { useRelease } from '../../features/releases/use-release'
 
 import { CalendarStackNavProps } from '../../types/screens'
-import { ReleaseType } from '../../types/releases'
+import { ReleaseType, PlatformSlug } from '../../types/releases'
 
 const windowHeight = Dimensions.get('window').height
 
@@ -34,23 +35,49 @@ function Play() {
     <Svg viewBox="0 0 25 25" width={64} height={64}>
       <Path
         d="M12.5 0A12.5 12.5 0 1025 12.5 12.52 12.52 0 0012.5 0zm5.26 12.92l-8 5a.56.56 0 01-.26.08.5.5 0 01-.24-.06.51.51 0 01-.26-.44v-10a.51.51 0 01.26-.44.49.49 0 01.51 0l8 5a.49.49 0 010 .84z"
-        fill="#111"
+        fill="#f5f5f5"
       />
     </Svg>
   )
 }
 
-const Release: React.FC<CalendarStackNavProps<'Release'>> = ({ route }) => {
-  const [showTrailer, setShowTrailer] = useState(false)
+const mcRatingDict = {
+  [PlatformSlug.PC]: { title: 'PC', color: '#fff', bgColor: '#000' },
+  [PlatformSlug.PS4]: { title: 'PS4', color: '#fff', bgColor: '#003087' },
+  [PlatformSlug.PS5]: { title: 'PS5', color: '#fff', bgColor: '#003087' },
+  [PlatformSlug.XboxOne]: {
+    title: 'Xbox One',
+    color: '#000',
+    bgColor: '#52b043',
+  },
+  [PlatformSlug.XboxSeries]: {
+    title: 'Xbox Series',
+    color: '#000',
+    bgColor: '#52b043',
+  },
+  [PlatformSlug.NintendoSwitch]: {
+    title: 'Switch',
+    color: '#000',
+    bgColor: '#e60012',
+  },
+}
+
+const Release: React.FC<CalendarStackNavProps<'Release'>> = ({
+  route,
+  navigation,
+}) => {
   const { id } = route.params
   const { release } = useRelease(id)
 
   if (!release) return null
 
-  const youtubeId = getYoutubeId(release.trailer)
-
   return (
     <SafeAreaView style={styles.safe}>
+      <FocusAwareStatus
+        barStyle="light-content"
+        translucent
+        backgroundColor="rgba(0, 0, 0, 0)"
+      />
       <ScrollView>
         <View style={styles.header}>
           <View style={styles.releaseDate}>
@@ -62,9 +89,11 @@ const Release: React.FC<CalendarStackNavProps<'Release'>> = ({ route }) => {
           </View>
           <ExpectButton release={release} />
         </View>
-        <TouchableHighlight
+        <Pressable
           onPress={() => {
-            setShowTrailer(true)
+            navigation.navigate('TrailerModal', {
+              url: release.trailer,
+            })
           }}
         >
           <>
@@ -72,7 +101,7 @@ const Release: React.FC<CalendarStackNavProps<'Release'>> = ({ route }) => {
               <Play />
             </View>
             <LinearGradient
-              colors={['transparent', 'rgb(242, 242, 242)']}
+              colors={['transparent', '#0b0b0b']}
               style={styles.coverGradient}
             />
             <ImageBackground
@@ -80,29 +109,7 @@ const Release: React.FC<CalendarStackNavProps<'Release'>> = ({ route }) => {
               style={styles.cover}
             ></ImageBackground>
           </>
-        </TouchableHighlight>
-        <Modal animationType="slide" visible={showTrailer} statusBarTranslucent>
-          {youtubeId && (
-            <SafeAreaView style={styles.safe}>
-              <View style={styles.trailer}>
-                <View style={styles.trailerHeader}>
-                  <TouchableHighlight
-                    onPress={() => {
-                      setShowTrailer(false)
-                    }}
-                  >
-                    <Text style={styles.close}>Закрыть</Text>
-                  </TouchableHighlight>
-                </View>
-                <YoutubePlayer
-                  height={270}
-                  videoId={youtubeId}
-                  initialPlayerParams={{}}
-                />
-              </View>
-            </SafeAreaView>
-          )}
-        </Modal>
+        </Pressable>
         <View style={styles.content}>
           <View style={styles.titles}>
             <Title h1 style={styles.title}>
@@ -129,7 +136,44 @@ const Release: React.FC<CalendarStackNavProps<'Release'>> = ({ route }) => {
               </Text>
             )}
           </View>
-          <View>
+          {release.type === ReleaseType.Games && (
+            <View style={styles.mcRatings}>
+              <Text style={{ marginBottom: 2 }} fontWeight={600}>
+                Metacritic:
+              </Text>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  margin: -4,
+                }}
+              >
+                {release.metacritic_ratings.map(rating => (
+                  <Pressable
+                    style={{
+                      borderRadius: 4,
+                      margin: 4,
+                      paddingHorizontal: 8,
+                      paddingVertical: 4,
+                      backgroundColor: mcRatingDict[rating.platform].bgColor,
+                    }}
+                    key={rating.url}
+                    onPress={() => {
+                      Linking.openURL(rating.url)
+                    }}
+                  >
+                    <Text
+                      style={{ color: mcRatingDict[rating.platform].color }}
+                    >
+                      {mcRatingDict[rating.platform].title} {rating.score}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+          )}
+          <View style={styles.desc}>
             <Text style={styles.desc}>{release.description}</Text>
             {(release.type === ReleaseType.Films ||
               release.type === ReleaseType.Series) && (
@@ -150,6 +194,12 @@ const Release: React.FC<CalendarStackNavProps<'Release'>> = ({ route }) => {
                 }}
               />
             )}
+            {release.type === ReleaseType.Games && (
+              <GameStoreButtons stores={release.stores} />
+            )}
+            {release.articles.length ? (
+              <Articles articles={release.articles} />
+            ) : null}
           </View>
         </View>
       </ScrollView>
@@ -172,14 +222,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     width: '100%',
-    ...Platform.select({
-      ios: {
-        top: 16,
-      },
-      android: {
-        top: 28,
-      },
-    }),
+    top: Constants.statusBarHeight + 8,
   },
   releaseDate: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -190,27 +233,6 @@ const styles = StyleSheet.create({
   date: {
     fontFamily: getFont('primary', 600),
     color: '#fff',
-  },
-  trailer: {
-    flex: 1,
-    backgroundColor: '#000',
-    justifyContent: 'center',
-  },
-  trailerHeader: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    paddingHorizontal: 16,
-    marginVertical: 16,
-    display: 'flex',
-  },
-  trailerTitle: {
-    fontWeight: '900',
-    fontSize: 36,
-  },
-  close: {
-    color: '#fff',
-    fontSize: 20,
   },
   cover: {
     width: '100%',
@@ -227,6 +249,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: vh30,
     zIndex: 1,
+  },
+  mcRatings: {
+    marginBottom: 16,
   },
   playIcon: {
     position: 'absolute',

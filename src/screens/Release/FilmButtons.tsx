@@ -6,11 +6,11 @@ import Button from '../../components/Button'
 interface Props {
   imdb: {
     link?: string
-    rating?: number
+    rating?: string
   }
   kinopoisk: {
     link?: string
-    rating?: number
+    rating?: string
   }
 }
 
@@ -32,7 +32,7 @@ function FilmButtons({ imdb, kinopoisk }: Props) {
           }}
         >
           КиноПоиск{' '}
-          {kinopoisk.rating && kinopoisk.rating > 0 && kinopoisk.rating}
+          {kinopoisk.rating && +kinopoisk.rating > 0 && kinopoisk.rating}
         </Button>
       ) : null}
       {imdb.link ? (
@@ -50,7 +50,7 @@ function FilmButtons({ imdb, kinopoisk }: Props) {
             },
           }}
         >
-          IMDb {imdb.rating && imdb.rating > 0 && imdb.rating}
+          IMDb {imdb.rating && +imdb.rating > 0 && imdb.rating}
         </Button>
       ) : null}
     </View>
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: 24,
   },
   button: {
     flex: 1,

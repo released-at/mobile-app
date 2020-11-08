@@ -1,6 +1,24 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
 
+export type RootScreens = {
+  Main: undefined
+  TrailerModal: {
+    url: string
+  }
+}
+
+export type TrailerModalScreens = {
+  TrailerModal: {
+    url: string
+  }
+}
+
+export type TrailerModalNavProps<T extends keyof TrailerModalScreens> = {
+  navigation: StackNavigationProp<TrailerModalScreens, T>
+  route: RouteProp<TrailerModalScreens, T>
+}
+
 export type TabScreens = {
   Calendar: undefined
   Archive: undefined
@@ -14,7 +32,13 @@ export type CalendarScreens = {
   Release: {
     id: number
   }
+  Post: {
+    id: number
+  }
   Today: undefined
+  TrailerModal: {
+    url: string
+  }
 }
 
 export type CalendarStackNavProps<T extends keyof CalendarScreens> = {

@@ -50,13 +50,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'flex-start',
     justifyContent: 'center',
     backgroundColor: '#1b79f3',
     borderRadius: 8,
     height: 40,
+    paddingHorizontal: 16,
   },
   text: {
     color: '#efefef',
+    fontSize: 14,
   },
 })
 

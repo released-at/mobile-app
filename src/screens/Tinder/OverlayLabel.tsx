@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+import Text from '../../components/Text'
 
 interface Props {
   label: string
@@ -22,7 +23,6 @@ const styles = StyleSheet.create({
   },
   overlayLabelText: {
     fontSize: 25,
-    fontFamily: 'Avenir',
     textAlign: 'center',
   },
 })

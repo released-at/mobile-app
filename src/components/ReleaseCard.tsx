@@ -1,7 +1,6 @@
 import React from 'react'
 import {
-  TouchableHighlight,
-  Image,
+  Pressable,
   View,
   Text,
   StyleSheet,
@@ -9,10 +8,10 @@ import {
   ViewStyle,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { LinearGradient } from 'expo-linear-gradient'
 import { format } from 'date-fns/esm'
 import { ru } from 'date-fns/esm/locale'
 import Title from './Title'
+import GradientOnImage from './GradientOnImage'
 import GamePlatformList from './GamePlatformList'
 import ExpectButton from './ExpectButton'
 import { getFont } from '../shared/utils'
@@ -32,7 +31,7 @@ const ReleaseCard: React.FC<Props> = ({
   const { navigate } = useNavigation()
 
   return (
-    <TouchableHighlight
+    <Pressable
       style={[styles.container, style]}
       onPress={() =>
         navigate('Release', {
@@ -41,40 +40,34 @@ const ReleaseCard: React.FC<Props> = ({
       }
     >
       <View style={styles.cardContent}>
-        <LinearGradient
-          colors={['transparent', 'rgba(0,0,0,0.75)']}
-          style={styles.darkGradient}
-        />
-        <View style={styles.header}>
-          <View style={styles.releaseDate}>
-            <Text style={styles.date}>
-              {format(new Date(release.released), 'EEEEEE, d MMM', {
-                locale: ru,
-              })}
-            </Text>
+        <GradientOnImage src={release.cover}>
+          <View style={styles.header}>
+            <View style={styles.releaseDate}>
+              <Text style={styles.date}>
+                {format(new Date(release.released), 'EEEEEE, d MMM', {
+                  locale: ru,
+                })}
+              </Text>
+            </View>
+            <ExpectButton style={styles.expect} release={release} />
           </View>
-          <ExpectButton style={styles.expect} release={release} />
-        </View>
-        <Image
-          style={styles.cover}
-          source={{ uri: release.cover, cache: 'default' }}
-        />
-        <View style={styles.footer}>
-          <Title h3 style={styles.title}>
-            {release.title}
-          </Title>
-          {release.type === ReleaseType.Films && (
-            <Text style={styles.extra}>{release.director}</Text>
-          )}
-          {release.type === ReleaseType.Games && (
-            <GamePlatformList platforms={release.platforms} />
-          )}
-          {release.type === ReleaseType.Series && (
-            <Text style={styles.extra}>Сезон {release.season}</Text>
-          )}
-        </View>
+          <View style={styles.footer}>
+            <Title h3 style={styles.title}>
+              {release.title}
+            </Title>
+            {release.type === ReleaseType.Films && (
+              <Text style={styles.extra}>{release.director}</Text>
+            )}
+            {release.type === ReleaseType.Games && (
+              <GamePlatformList platforms={release.platforms} />
+            )}
+            {release.type === ReleaseType.Series && (
+              <Text style={styles.extra}>Сезон {release.season}</Text>
+            )}
+          </View>
+        </GradientOnImage>
       </View>
-    </TouchableHighlight>
+    </Pressable>
   )
 }
 
@@ -82,7 +75,7 @@ const styles = StyleSheet.create({
   container: {
     width: 315,
     height: 220,
-    borderRadius: 24,
+    borderRadius: 20,
     overflow: 'hidden',
   },
   cardContent: {
@@ -105,8 +98,7 @@ const styles = StyleSheet.create({
   header: {
     position: 'absolute',
     width: '100%',
-    paddingHorizontal: 16,
-    top: 16,
+    padding: 12,
     zIndex: 2,
     display: 'flex',
     flexDirection: 'row',
@@ -126,9 +118,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: 'absolute',
-    left: 16,
-    bottom: 16,
+    padding: 12,
     zIndex: 2,
+    bottom: 0,
   },
   title: {
     color: '#fff',

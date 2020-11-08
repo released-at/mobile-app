@@ -19,7 +19,7 @@ interface Props {
 const ReleaseList: React.FC<Props> = ({ releases, type }) => {
   return (
     <View style={styles.list}>
-      <Title h2>{typeDict[type]}</Title>
+      <Title h3>{typeDict[type]}</Title>
       <FlatList
         data={releases.sort((a, b) =>
           compareAsc(new Date(a.released), new Date(b.released)),
@@ -38,11 +38,6 @@ const ReleaseList: React.FC<Props> = ({ releases, type }) => {
 const styles = StyleSheet.create({
   list: {
     marginBottom: 32,
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 24,
-    marginBottom: 4,
   },
   card: {
     marginRight: 16,

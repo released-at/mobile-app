@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-  StyleSheet,
-  Pressable,
-} from 'react-native'
+import { View, StyleSheet, Pressable } from 'react-native'
 import {
   eachYearOfInterval,
   eachMonthOfInterval,
@@ -14,6 +7,9 @@ import {
   format,
 } from 'date-fns/esm'
 import { ru } from 'date-fns/esm/locale'
+import ScreenWrapper from '../../components/ScreenWrapper'
+import Title from '../../components/Title'
+import Text from '../../components/Text'
 
 import { ArchiveStackNavProps } from '../../types/screens'
 
@@ -39,32 +35,27 @@ const SelectMonthInArchive: React.FC<ArchiveStackNavProps<'SelectMonth'>> = ({
   navigation,
 }) => {
   return (
-    <SafeAreaView style={styles.safe}>
-      <ScrollView style={styles.container}>
-        <Text style={styles.title}>Архив</Text>
-        <View>
-          {Object.keys(archive).map(year => (
-            <View style={styles.yearSection} key={year}>
-              <Text style={styles.year}>{year}</Text>
-              {archive[year].map(month => (
-                <Pressable
-                  key={month.num}
-                  style={styles.monthButton}
-                  onPress={() => {
-                    navigation.navigate('Releases', {
-                      month: month.num,
-                      year,
-                    })
-                  }}
-                >
-                  <Text style={styles.month}>{month.title}</Text>
-                </Pressable>
-              ))}
-            </View>
+    <ScreenWrapper title="Архив">
+      {Object.keys(archive).map(year => (
+        <View style={styles.yearSection} key={year}>
+          <Title h2>{year}</Title>
+          {archive[year].map(month => (
+            <Pressable
+              key={month.num}
+              style={styles.monthButton}
+              onPress={() => {
+                navigation.navigate('Releases', {
+                  month: month.num,
+                  year,
+                })
+              }}
+            >
+              <Text style={styles.month}>{month.title}</Text>
+            </Pressable>
           ))}
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      ))}
+    </ScreenWrapper>
   )
 }
 
@@ -76,9 +67,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   title: {
-    fontWeight: '900',
-    fontSize: 36,
-    marginVertical: 16,
+    marginTop: 16,
   },
   yearSection: {
     marginBottom: 24,
