@@ -2,7 +2,7 @@
   "expo": {
     "name": "Released",
     "slug": "Released",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -23,7 +23,7 @@
       "googleServicesFile": "./google-services.json",
       "package": "com.setka_development.released",
       "permissions": [],
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
