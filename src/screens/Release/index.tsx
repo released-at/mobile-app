@@ -136,43 +136,44 @@ const Release: React.FC<CalendarStackNavProps<'Release'>> = ({
               </Text>
             )}
           </View>
-          {release.type === ReleaseType.Games && (
-            <View style={styles.mcRatings}>
-              <Text style={{ marginBottom: 2 }} fontWeight={600}>
-                Metacritic:
-              </Text>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  margin: -4,
-                }}
-              >
-                {release.metacritic_ratings.map(rating => (
-                  <Pressable
-                    style={{
-                      borderRadius: 4,
-                      margin: 4,
-                      paddingHorizontal: 8,
-                      paddingVertical: 4,
-                      backgroundColor: mcRatingDict[rating.platform].bgColor,
-                    }}
-                    key={rating.url}
-                    onPress={() => {
-                      Linking.openURL(rating.url)
-                    }}
-                  >
-                    <Text
-                      style={{ color: mcRatingDict[rating.platform].color }}
+          {release.type === ReleaseType.Games &&
+            release.metacritic_ratings.length > 0 && (
+              <View style={styles.mcRatings}>
+                <Text style={{ marginBottom: 2 }} fontWeight={600}>
+                  Metacritic:
+                </Text>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    margin: -4,
+                  }}
+                >
+                  {release.metacritic_ratings.map(rating => (
+                    <Pressable
+                      style={{
+                        borderRadius: 4,
+                        margin: 4,
+                        paddingHorizontal: 8,
+                        paddingVertical: 4,
+                        backgroundColor: mcRatingDict[rating.platform].bgColor,
+                      }}
+                      key={rating.url}
+                      onPress={() => {
+                        Linking.openURL(rating.url)
+                      }}
                     >
-                      {mcRatingDict[rating.platform].title} {rating.score}
-                    </Text>
-                  </Pressable>
-                ))}
+                      <Text
+                        style={{ color: mcRatingDict[rating.platform].color }}
+                      >
+                        {mcRatingDict[rating.platform].title} {rating.score}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
               </View>
-            </View>
-          )}
+            )}
           <View style={styles.desc}>
             <Text style={styles.desc}>{release.description}</Text>
             {(release.type === ReleaseType.Films ||

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1045869461242",
+    "firebase_url": "https://released-a4576.firebaseio.com",
+    "project_id": "released-a4576",
+    "storage_bucket": "released-a4576.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045869461242:android:01d5d8ff56285ee11cd343",
+        "android_client_info": {
+          "package_name": "com.setka_development.released"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1045869461242-qmo6q10ntrcqoakln38nefh9465gf8cu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj3nnkrJdZhcamm_voTmEhgoaMe7_6Y8w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1045869461242-qmo6q10ntrcqoakln38nefh9465gf8cu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

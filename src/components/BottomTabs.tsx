@@ -2,7 +2,6 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Feather } from '@expo/vector-icons'
 import Calendar from '../stacks/Calendar'
-import Tinder from '../stacks/Tinder'
 import Archive from '../stacks/Archive'
 import Me from '../stacks/Me'
 import Blog from '../stacks/Blog'
@@ -41,7 +40,6 @@ const BottomTabs: React.FC<{}> = () => {
       <Tabs.Screen name="Calendar" component={Calendar} />
       <Tabs.Screen name="Archive" component={Archive} />
       <Tabs.Screen name="Blog" component={Blog} />
-      <Tabs.Screen name="Tinder" component={Tinder} />
       <Tabs.Screen name="Profile" component={Me} />
     </Tabs.Navigator>
   )

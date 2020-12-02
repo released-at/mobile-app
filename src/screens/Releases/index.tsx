@@ -4,10 +4,13 @@ import {
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
+  View,
 } from 'react-native'
 import Header from './Header'
 import ReleaseList from '../../components/ReleaseList'
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
+import Button from '../../components/Button'
+import Text from '../../components/Text'
 import { toNextMonth, toPrevMonth } from '../../features/releases/utils'
 import { useReleases } from '../../features/releases/use-releases'
 import { months } from '../../shared/constants'
@@ -55,6 +58,12 @@ const Releases: React.FC<CalendarStackNavProps<'Releases'>> = ({ route }) => {
         toCurrent={current}
       />
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.tgBotWrapper}>
+          <Text withMarginBottom>
+            Чтобы получать уведомления, воспользуйтесь нашим телеграм-ботом
+          </Text>
+          <Button>Телеграм-бот</Button>
+        </View>
         {films.data ? (
           <ReleaseList type={ReleaseType.Films} releases={films.data} />
         ) : (
@@ -81,6 +90,9 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingLeft: 16,
+  },
+  tgBotWrapper: {
+    marginBottom: 12,
   },
 })
 
