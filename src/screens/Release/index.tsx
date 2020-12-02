@@ -179,18 +179,18 @@ const Release: React.FC<CalendarStackNavProps<'Release'>> = ({
             {(release.type === ReleaseType.Films ||
               release.type === ReleaseType.Series) && (
               <FilmButtons
-                imdb={{
+                kinopoisk={{
                   link: release.kinopoisk_url,
                   rating:
                     release.type === ReleaseType.Films
-                      ? release.ratings.imdb
+                      ? release.ratings.kinopoisk
                       : undefined,
                 }}
-                kinopoisk={{
+                imdb={{
                   link: release.imdb_url,
                   rating:
                     release.type === ReleaseType.Films
-                      ? release.ratings.kinopoisk
+                      ? release.ratings.imdb
                       : undefined,
                 }}
               />
